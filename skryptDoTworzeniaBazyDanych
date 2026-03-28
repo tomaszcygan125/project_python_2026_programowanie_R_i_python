@@ -1,0 +1,209 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Czas generowania: 28 Mar 2026, 18:57
+-- Wersja serwera: 10.4.25-MariaDB
+-- Wersja PHP: 8.1.10
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Baza danych: `banking_app`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `account_table`
+--
+
+CREATE TABLE `account_table` (
+  `account_id` char(20) NOT NULL,
+  `client_id` char(50) NOT NULL,
+  `balance` decimal(10,2) NOT NULL,
+  `maximal_overdraft` decimal(10,2) NOT NULL,
+  `currency_code` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Zrzut danych tabeli `account_table`
+--
+
+INSERT INTO `account_table` (`account_id`, `client_id`, `balance`, `maximal_overdraft`, `currency_code`) VALUES
+('1234', 'user_id', '66.00', '0.00', 1),
+('12345', 'user_id', '111.00', '0.00', 1),
+('nowekonto', 'user_id4', '141.08', '0.00', 1),
+('nowekonto01', 'user_id123', '5.00', '0.00', 3),
+('nowekonto2', 'user_id4', '109.00', '0.00', 1),
+('nowekonto3', 'user_id4', '1090.00', '0.00', 3),
+('nowekonto35', 'user_id123', '123.00', '0.00', 2),
+('nowekonto4', 'user_id4', '514.72', '0.00', 3),
+('nowekonto5', 'user_id4', '89.80', '3.00', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `client_table`
+--
+
+CREATE TABLE `client_table` (
+  `client_id` char(50) NOT NULL,
+  `user_type` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Zrzut danych tabeli `client_table`
+--
+
+INSERT INTO `client_table` (`client_id`, `user_type`) VALUES
+('client_bank', 1),
+('user_id1234', 1),
+('user_id2', 1),
+('user_id3', 1),
+('user_id', 2),
+('user_id123', 2),
+('user_id12345', 2),
+('user_id4', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `currency_table`
+--
+
+CREATE TABLE `currency_table` (
+  `currency_code` int(11) NOT NULL,
+  `name` char(50) NOT NULL,
+  `convert_rate_to_pln` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Zrzut danych tabeli `currency_table`
+--
+
+INSERT INTO `currency_table` (`currency_code`, `name`, `convert_rate_to_pln`) VALUES
+(1, 'Polski złoty PLN', '1.00'),
+(2, 'American Dolar USD', '3.63'),
+(3, 'European Euro EUR', '4.23');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `login_table`
+--
+
+CREATE TABLE `login_table` (
+  `client_id` char(50) NOT NULL,
+  `password_hash` binary(64) NOT NULL,
+  `password_salt` binary(128) NOT NULL,
+  `last_login_timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Zrzut danych tabeli `login_table`
+--
+
+INSERT INTO `login_table` (`client_id`, `password_hash`, `password_salt`, `last_login_timestamp`) VALUES
+('client_bank', 0x2df3799dd5b7b0776a7311ebe8468610361cb89fe022c4bc62bf46b8943a51be3b6a1c417761a8193d46e3cdf98ffedecb9902df1e573826194d9f8ee091d610, 0xb9c9d65c643d72117876786d3974319f406e752cd84a4ac86774c33ab55a9dc19f39142155aecccaecd97b81c387ad977f38c5b6a94a496f4ecca9597a237556ab9d03e471bb5a6d7365a1ecc4c380aa1e1886e016c89f5208d5c71b5a7c5eb0e9be8314e2725573430f93661ea69e0a300c264faf6d0cf4b09ec7beec720d21, '0000-00-00 00:00:00'),
+('user_id', 0xe6be9f7c86e1ffeef3522908beb50c37f79135228bd352793f503449acd0a3a646c41ae559eb8ba23cfd6017b1a0dfaad385107a21f42f36e964448455fc0eb9, 0x4bdae83f85fc80d0442e648aff9f56ab27d301954a13bbb3b662362930b603b3298669f6975d2b06375fe9dfabf1409a747c176d61bfc27abdb74f7f4788324a40f154a12ceff7e3d1806a857dd1d5832b788064935d08715bfbf0c19f6d060febfc4a60a9c779df759777041067ec9663c39bff11525a39db0f8ec689e55710, '2026-03-28 17:44:40'),
+('user_id123', 0x444055ff92c561ba790c22d0ad59a9d492317404dabda0337f52e8b1623a5c400ed52a3ce0a7abd57cb40a9fe9af55728a03731c5abda2ebb09043df0acbde5b, 0x62bc70fbb972bd194f39df0dae63b8d16b07eb4c120c7fa3d8f4a01e1b9d9a63d68175ec502d630f245ae15135e795f9917cae281af849b4813e6753b03210c6240be84c53452a70c96fc15115f4c9ac386d5101f8b1757af4bec7f9317b4408dc004637ec5f6cc191f9c2d9fdbc1d2476078f3d5286648353b29e6a78bf713c, '0000-00-00 00:00:00'),
+('user_id1234', 0x55f5c15dc711c293bd493959d39b20bb0e062a0c136cc5937dbc1097387071ab83fdb6aab635a1eacf3d8a199825e0255bdbaff40e35a78aec6eaf42416927bb, 0x06201085845cfef60f8c188459b99ace2a6bcd4225292783f96a91048756b43b99f1ec6454605e8b0b84ecff4e9717a58008f55382e08c83c0d87455ac35141e2a6a976e65fed567852892e9c6881a85e75150cb408c880689b0be049359d9fa2451cee059a45bfec470971d3aa64eeb6b24433c5521f7f1b74d10bc5051a160, '2026-03-28 17:34:18'),
+('user_id12345', 0x0823b6a61aaa4ba7d9e9764a675cfac7a2739aa21ec602c59121810393f36ed6f5e3916d00a74b8fa1dce71b5717cba3d5af6676d8155659411f5db3cffaca4e, 0xe00d8aec3367567e6bf46e9a915fae545805f9b1dde8cf05ec6e156526e417aefa537298c08835eb8830b7793a0d9012423fb06b57b77e5accfd45d94354c21e2063beab095d3dca98fa75583a258144d606412223bc24dc3cf0b512fbdf644c561f04fd1fe184d13b22518f942572ad79e9a16cbb0792fb6cf80c0cc6de1bfc, '0000-00-00 00:00:00'),
+('user_id2', 0xf594164869cb29e246fa659bf87ade6f27f742f727c4a3a00d6dd69720e65cebfd5e11b2e9360a38156bc6cc41b86e37a349a8bb0abea25154dbd20e654818d2, 0x3e86a2a109faf9dfd3ae634a9db775b90b5217b019970b8826307a16256c6e8ee5d58dbdb6c63d9c8615b82b5a6544b20b5bd98027d8ec79112a3e8df61f81b9538cf31d39e8962fed64b3cabafecc63de2e96d01e3d4684ecf0b388a54cbeef853fdc298271de0f12af9766cd90919c052a2cd648f8e5b751e9cb8eee61e83c, '2025-12-07 08:17:53'),
+('user_id3', 0x6382e13d8709d393e958e94641461a941af4c7a791fed05dc0fcd5dcc165b351b7b103de7f859684f4d1bb12a19a1691fa59c6113dc610d943e2468bd540ddea, 0x2e489d6fedea9b5a731ec72f03716b230e17d37af70c7f8c0aa15a4cbc65aeb83bcff496b40ac0fd6ba0711ed732bc31d5bb231c65bca2c02eeece17b130cc88d6a551c7e1160a19d5b1a271e92dd5383429fa5a91838742024af18343b8370555abc2bd966d46faf62f0ad2c0db754a4a444072a0ab7c969c326f13fbed30c9, '0000-00-00 00:00:00'),
+('user_id4', 0x52c3c15a7c11097f3d0ad9b321fd6e6b2dfd1c665f68f4389168af91364af2043f394bde03b9fb9e63542a234e4950d22fb9deafaf30ed651144618e70b852b1, 0x31dea0716f45712d2e240819d41b2ed206e3f51415d761982167af027153e0b627c58be420529a0edf58311f6162aa6c74e83cf941c4dd3495adcbcc67a45535cf5659214d1fdcfad2a294bd7cfaccb73f84f515e0f0d1ca63ab276b5f6e66d0afc00160bdd7dc8a9013464a4e7f824f0acf4d286eaa0e91ad34df18eda1cf94, '2025-12-09 19:28:38');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `user_types`
+--
+
+CREATE TABLE `user_types` (
+  `type_id` int(11) NOT NULL,
+  `user_type_desc` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Zrzut danych tabeli `user_types`
+--
+
+INSERT INTO `user_types` (`type_id`, `user_type_desc`) VALUES
+(0, 'Unspecified user type'),
+(1, 'Bank user'),
+(2, 'Private user');
+
+--
+-- Indeksy dla zrzutów tabel
+--
+
+--
+-- Indeksy dla tabeli `account_table`
+--
+ALTER TABLE `account_table`
+  ADD PRIMARY KEY (`account_id`),
+  ADD KEY `fk_account_client` (`client_id`),
+  ADD KEY `fk_account_currency` (`currency_code`);
+
+--
+-- Indeksy dla tabeli `client_table`
+--
+ALTER TABLE `client_table`
+  ADD PRIMARY KEY (`client_id`),
+  ADD KEY `fk_client_user_type` (`user_type`);
+
+--
+-- Indeksy dla tabeli `currency_table`
+--
+ALTER TABLE `currency_table`
+  ADD PRIMARY KEY (`currency_code`);
+
+--
+-- Indeksy dla tabeli `login_table`
+--
+ALTER TABLE `login_table`
+  ADD PRIMARY KEY (`client_id`);
+
+--
+-- Indeksy dla tabeli `user_types`
+--
+ALTER TABLE `user_types`
+  ADD PRIMARY KEY (`type_id`);
+
+--
+-- Ograniczenia dla zrzutów tabel
+--
+
+--
+-- Ograniczenia dla tabeli `account_table`
+--
+ALTER TABLE `account_table`
+  ADD CONSTRAINT `fk_account_client` FOREIGN KEY (`client_id`) REFERENCES `client_table` (`client_id`),
+  ADD CONSTRAINT `fk_account_currency` FOREIGN KEY (`currency_code`) REFERENCES `currency_table` (`currency_code`);
+
+--
+-- Ograniczenia dla tabeli `client_table`
+--
+ALTER TABLE `client_table`
+  ADD CONSTRAINT `fk_client_user_type` FOREIGN KEY (`user_type`) REFERENCES `user_types` (`type_id`);
+
+--
+-- Ograniczenia dla tabeli `login_table`
+--
+ALTER TABLE `login_table`
+  ADD CONSTRAINT `fk_login_client` FOREIGN KEY (`client_id`) REFERENCES `client_table` (`client_id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
