@@ -40,7 +40,6 @@ class BankUser(User):
             insertQueryClientTable = "INSERT INTO client_table(client_id, user_type) values(%s, %s)"
 
             self.cursor.execute(insertQueryClientTable, (userName, userType,))
-            print('po pierwszym insert')
             # Insert to table login_table
             insertQueryLoginTable = "INSERT INTO login_table(client_id, password_hash, password_salt) values(%s,%s,%s)"
 
